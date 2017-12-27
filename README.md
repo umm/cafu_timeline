@@ -5,6 +5,7 @@
 # Requirement
 
 * Unity 2017.3
+  * .NET 4.6 (Experimental)
 * [CAFU](https://github.com/umm-projects/cafu_core)
 
 # Install
