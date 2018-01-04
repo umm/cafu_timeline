@@ -21,11 +21,11 @@ namespace CAFU.Timeline.Presentation.View {
         [SerializeField]
         private List<TTimelineInformation> timelineInformationList;
 
-        protected IEnumerable<TTimelineInformation> TimelineInformationList => this.timelineInformationList;
+        private IEnumerable<TTimelineInformation> TimelineInformationList => this.timelineInformationList;
 
         public abstract ITimelinePresenter<TEnum, TTimelineInformation> GetTimelinePresenter();
 
-        private void Start() {
+        private void Awake() {
             this.GetTimelinePresenter().InitializeTimelineInformationList(this.TimelineInformationList);
         }
 
