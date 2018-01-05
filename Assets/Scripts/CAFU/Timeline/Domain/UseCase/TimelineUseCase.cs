@@ -25,14 +25,6 @@ namespace CAFU.Timeline.Domain.UseCase {
             return this.TimelineModel.TimelineInformationList.Find(x => Equals(x.Name, name)).PlayableDirector;
         }
 
-        public ObservableTimeControlTrigger GetObservableTimeControlTrigger(TEnum name) {
-            PlayableDirector playableDirector = this.GetPlayableDirector(name);
-            if (playableDirector.gameObject.GetComponent<ObservableTimeControlTrigger>() == default(ObservableTimeControlTrigger)) {
-                playableDirector.gameObject.AddComponent<ObservableTimeControlTrigger>();
-            }
-            return playableDirector.gameObject.GetComponent<ObservableTimeControlTrigger>();
-        }
-
     }
 
 }
