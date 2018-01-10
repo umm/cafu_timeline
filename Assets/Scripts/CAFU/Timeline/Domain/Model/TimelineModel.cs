@@ -6,13 +6,31 @@ using UnityEngine.Playables;
 
 namespace CAFU.Timeline.Domain.Model {
 
-    public class TimelineModel<TEnum> : IModel where TEnum : struct {
+    public class TimelineModel<TEnum, TTimelineInformation> : IModel
+        where TEnum : struct
+        where TTimelineInformation : TimelineInformation<TEnum>, new() {
 
-        public List<TimelineInformation<TEnum>> TimelineInformationList { get; private set; }
+        private readonly List<TimelineInformation<TEnum>> TimelineInformationList;
 
-        public void RegisterTimelineInformationList<TTimelineInformation>(IEnumerable<TTimelineInformation> timelineInformationList)
-            where TTimelineInformation : TimelineInformation<TEnum> {
-            this.TimelineInformationList = timelineInformationList.Cast<TimelineInformation<TEnum>>().ToList();
+        public TimelineModel() {
+            this.TimelineInformationList = new List<TimelineInformation<TEnum>>();
+        }
+
+        public bool HasPlayableDirector(TEnum name) {
+            return this.TimelineInformationList.Any(x => x.Name.Equals(name) && x.PlayableDirector != default(PlayableDirector));
+        }
+
+        public PlayableDirector GetPlayableDirector(TEnum name) {
+            return this.TimelineInformationList.Find(x => x.Name.Equals(name)).PlayableDirector;
+        }
+
+        public void SetTimelineInformation(TEnum name, PlayableDirector playableDirector) {
+            this.TimelineInformationList.Add(
+                new TTimelineInformation() {
+                    Name = name,
+                    PlayableDirector = playableDirector,
+                }
+            );
         }
 
     }
@@ -22,12 +40,26 @@ namespace CAFU.Timeline.Domain.Model {
         [SerializeField]
         private TEnum name;
 
-        public TEnum Name => this.name;
+        public TEnum Name {
+            get {
+                return this.name;
+            }
+            set {
+                this.name = value;
+            }
+        }
 
         [SerializeField]
         private PlayableDirector playableDirector;
 
-        public PlayableDirector PlayableDirector => this.playableDirector;
+        public PlayableDirector PlayableDirector {
+            get {
+                return this.playableDirector;
+            }
+            set {
+                this.playableDirector = value;
+            }
+        }
 
     }
 

@@ -1,28 +1,36 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using CAFU.Core.Domain;
+﻿using CAFU.Core.Domain;
 using CAFU.Timeline.Domain.Model;
-using UniRx.Triggers;
 using UnityEngine.Playables;
 
 namespace CAFU.Timeline.Domain.UseCase {
 
-    public class TimelineUseCase<TEnum> : IUseCase, IUseCaseBuilder
-        where TEnum : struct {
+    public interface IPlayableDirectorResolver<in TEnum> where TEnum : struct {
 
-        private TimelineModel<TEnum> TimelineModel { get; set; }
+        PlayableDirector GetPlayableDirector(TEnum name);
+
+    }
+
+    public class TimelineUseCase<TEnum, TTimelineInformation> : IUseCase, IUseCaseBuilder
+        where TEnum : struct
+        where TTimelineInformation : TimelineInformation<TEnum>, new() {
+
+        private TimelineModel<TEnum, TTimelineInformation> TimelineModel { get; set; }
+
+        private IPlayableDirectorResolver<TEnum> PlayableDirectorResolver { get; set; }
 
         public void Build() {
-            this.TimelineModel = new TimelineModel<TEnum>();
+            this.TimelineModel = new TimelineModel<TEnum, TTimelineInformation>();
         }
 
-        public void RegisterTimelineInformationList<TTimelineInformation>(IEnumerable<TTimelineInformation> timelineInformationList)
-            where TTimelineInformation : TimelineInformation<TEnum> {
-            this.TimelineModel.RegisterTimelineInformationList(timelineInformationList.Cast<TimelineInformation<TEnum>>().ToList());
+        public void RegisterPlayableDirectorResolver(IPlayableDirectorResolver<TEnum> playableDirectorResolver) {
+            this.PlayableDirectorResolver = playableDirectorResolver;
         }
 
         public PlayableDirector GetPlayableDirector(TEnum name) {
-            return this.TimelineModel.TimelineInformationList.Find(x => Equals(x.Name, name)).PlayableDirector;
+            if (!this.TimelineModel.HasPlayableDirector(name)) {
+                this.TimelineModel.SetTimelineInformation(name, this.PlayableDirectorResolver.GetPlayableDirector(name));
+            }
+            return this.TimelineModel.GetPlayableDirector(name);
         }
 
     }
