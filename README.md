@@ -61,11 +61,31 @@ namespace MainProject.SubProject.Presentation.View.SampleScene {
 
 * 操作対象の TimelineAsset 名を列挙した enum を定義します。
 * この enum の名称をもとに、操作対象の PlayableDirector を解決します。
-  * Timeline コンポーネントがアタッチされている GameObject 以下の GameObject を探しに行きます。
-    * 上記の例の場合、 `TimelineName.Hoge` は `/Timeline/Hoge` にアタッチされている PlayableDirector を参照します。
-  * enum と Hierarchy 上のパスが異なる場合は、 Timeline コンポーネントの Timeline Information List に対して手動で設定することも可能です。
-  * Hierarchy 的にネストしている場合は、enum の名称をアンダースコアで区切ると、それを階層の区切りと見なして（スラッシュに変換して）探しに行きます。
-    * 上記の例の場合、 `TimelineName.Foo_Bar` は `/Timeline/Foo/Bar` にアタッチされている PlayableDirector を参照します。
+
+##### 解決ルール
+
+1. Timeline コンポーネントの Timeline Information List に設定済の情報
+1. Timeline GameObject 直下にある GameObject のうち、enum の名称と完全一致する要素
+1. Timeline GameObject 以下にある GameObject のうち、enum の名称のアンダースコアを階層区切り（スラッシュに変換）と見なしてパスが一致する要素
+1. Timeline GameObject 以下にある GameObject のうち、単一の GameObject の名称が enum の名称と完全一致する要素
+
+##### 例
+
+```
+Controller
+Timeline
+  Toggle
+    Show
+      ShowHoge
+      ShowFuga
+    Hide
+      HideHoge
+      HideFuga
+```
+
+* `TimelineName.Toggle`: `/Timeline/Toggle`
+* `TimelineName.Toggle_Show_ShowHoge`: `/Timeline/Toggle/Show/ShowHoge`
+* `TimelineName.Hide`: `/Timeline/Toggle/Hide`
 
 #### TimelineInformation
 
