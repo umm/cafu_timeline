@@ -6,7 +6,7 @@ namespace CAFU.Timeline.Domain.UseCase {
 
     public interface IPlayableDirectorResolver<in TEnum> where TEnum : struct {
 
-        PlayableDirector GetPlayableDirector(TEnum name);
+        PlayableDirector GetPlayableDirector(TEnum timelineName);
 
     }
 

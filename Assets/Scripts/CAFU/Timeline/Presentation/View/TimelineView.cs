@@ -28,19 +28,24 @@ namespace CAFU.Timeline.Presentation.View {
             this.GetTimelinePresenter().RegisterPlayableDirectorResolver(this);
         }
 
-        public PlayableDirector GetPlayableDirector(TEnum name) {
-            if (!this.TimelineInformationList.Any(x => x.Name.Equals(name))) {
-                this.AddTimelineInformationFromTransform(name);
+        public PlayableDirector GetPlayableDirector(TEnum timelineName) {
+            if (!this.TimelineInformationList.Any(x => x.Name.Equals(timelineName))) {
+                this.AddTimelineInformationFromTransform(timelineName);
             }
-            return this.TimelineInformationList.Find(x => x.Name.Equals(name)).PlayableDirector;
+            return this.TimelineInformationList.Find(x => x.Name.Equals(timelineName)).PlayableDirector;
         }
 
-        private void AddTimelineInformationFromTransform(TEnum name) {
-            Transform playableDirectorTransform = this.transform.Find(name.ToString().Replace("_", "/"));
+        private void AddTimelineInformationFromTransform(TEnum timelineName) {
+            // enum のアンダースコアをスラッシュに置換して、Hierarchy を探す
+            Transform playableDirectorTransform = this.transform.Find(timelineName.ToString().Replace("_", "/"));
+            // 見付からなかった場合に、配下の全 Transform の名前を enum の完全一致で探す
+            if (playableDirectorTransform == default(Transform)) {
+                playableDirectorTransform = this.transform.GetComponentsInChildren<Transform>().ToList().Find(x => x.name == timelineName.ToString());
+            }
             if (playableDirectorTransform != default(Transform)) {
                 this.TimelineInformationList.Add(
                     new TTimelineInformation() {
-                        Name = name,
+                        Name = timelineName,
                         PlayableDirector = playableDirectorTransform.GetComponent<PlayableDirector>(),
                     }
                 );
