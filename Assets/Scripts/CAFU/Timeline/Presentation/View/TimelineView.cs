@@ -28,19 +28,20 @@ namespace CAFU.Timeline.Presentation.View {
             this.GetTimelinePresenter().RegisterPlayableDirectorResolver(this);
         }
 
-        public PlayableDirector GetPlayableDirector(TEnum name) {
-            if (!this.TimelineInformationList.Any(x => x.Name.Equals(name))) {
-                this.AddTimelineInformationFromTransform(name);
+        public PlayableDirector GetPlayableDirector(TEnum timelineName) {
+            if (!this.TimelineInformationList.Any(x => x.Name.Equals(timelineName))) {
+                this.AddTimelineInformationFromTransform(timelineName);
             }
-            return this.TimelineInformationList.Find(x => x.Name.Equals(name)).PlayableDirector;
+            return this.TimelineInformationList.Find(x => x.Name.Equals(timelineName)).PlayableDirector;
         }
 
-        private void AddTimelineInformationFromTransform(TEnum name) {
-            Transform playableDirectorTransform = this.transform.Find(name.ToString().Replace("_", "/"));
+        private void AddTimelineInformationFromTransform(TEnum timelineName) {
+            // enum のアンダースコアをスラッシュに置換して、Hierarchy を探す
+            Transform playableDirectorTransform = this.transform.Find(timelineName.ToString().Replace("_", "/"));
             if (playableDirectorTransform != default(Transform)) {
                 this.TimelineInformationList.Add(
                     new TTimelineInformation() {
-                        Name = name,
+                        Name = timelineName,
                         PlayableDirector = playableDirectorTransform.GetComponent<PlayableDirector>(),
                     }
                 );
