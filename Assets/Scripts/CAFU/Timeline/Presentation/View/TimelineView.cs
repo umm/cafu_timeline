@@ -40,7 +40,7 @@ namespace CAFU.Timeline.Presentation.View {
             Transform playableDirectorTransform = this.transform.Find(timelineName.ToString().Replace("_", "/"));
             // 見付からなかった場合に、配下の全 Transform の名前を enum の完全一致で探す
             if (playableDirectorTransform == default(Transform)) {
-                playableDirectorTransform = this.transform.GetComponentsInChildren<Transform>().ToList().Find(x => x.name == timelineName.ToString());
+                playableDirectorTransform = this.transform.GetComponentsInChildren<Transform>(true).ToList().Find(x => x.name == timelineName.ToString());
             }
             if (playableDirectorTransform != default(Transform)) {
                 this.TimelineInformationList.Add(
