@@ -9,6 +9,13 @@ using UnityEngine.Playables;
 
 namespace CAFU.Timeline.Data.DataStore.Scene {
 
+    public interface ITimelineDataStoreController<TTimelineEntity> where TTimelineEntity : class, ITimelineEntity, new() {
+
+        [ObservableAwakeMonoBehaviour]
+        TimelineDataStore<TTimelineEntity> TimelineDataStore { get; }
+
+    }
+
     public abstract class TimelineDataStore<TTimelineEntity> : ObservableLifecycleMonoBehaviour, ITimelineDataStore
         where TTimelineEntity : class, ITimelineEntity, new() {
 
