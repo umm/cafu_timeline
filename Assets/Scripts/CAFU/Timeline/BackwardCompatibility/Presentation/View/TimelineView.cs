@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CAFU.Core.Presentation.View;
 using CAFU.Timeline.Domain.Model;
 using CAFU.Timeline.Domain.UseCase;
 using CAFU.Timeline.Presentation.Presenter;
-using UniRx;
 using UnityEngine;
 using UnityEngine.Playables;
 
 namespace CAFU.Timeline.Presentation.View {
+
+    public interface ITimelineView : IView {
+
+    }
 
     [Obsolete("Please use TimelineView<TTimelineModel> instead of this class.")]
     public abstract class TimelineView<TEnum, TTimelineInformation> : MonoBehaviour, ITimelineView, IPlayableDirectorResolver<TEnum>
@@ -48,10 +52,6 @@ namespace CAFU.Timeline.Presentation.View {
                     }
                 );
             }
-        }
-
-        public UniRx.IObservable<Unit> OnAwakeAsObservable() {
-            throw new NotImplementedException();
         }
 
     }
