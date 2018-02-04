@@ -1,30 +1,23 @@
-﻿using CAFU.Core.Domain.UseCase;
-using CAFU.Timeline.Domain.Model;
+﻿using CAFU.Timeline.Domain.Repository;
+using CAFU.Core.Domain.Repository;
+using CAFU.Core.Domain.UseCase;
+using CAFU.Timeline.Data.Entity;
 using UnityEngine.Playables;
 
 namespace CAFU.Timeline.Domain.UseCase {
 
-    public interface IPlayableDirectorResolver {
+    public class TimelineUseCase<TTimelineEntity> : IUseCase
+        where TTimelineEntity : class, ITimelineEntity, new() {
 
-        PlayableDirector GetPlayableDirector<TEnum>(TEnum timelineName) where TEnum : struct;
+        private ITimelineRepository TimelineRepository { get; }
 
-    }
-
-    public class TimelineUseCase<TTimelineModel> : IUseCase, IUseCaseFactory<TimelineUseCase<TTimelineModel>>
-        where TTimelineModel : ITimelineModel, new() {
-
-        private IPlayableDirectorResolver PlayableDirectorResolver { get; set; }
-
-        public void RegisterPlayableDirectorResolver(IPlayableDirectorResolver playableDirectorResolver) {
-            this.PlayableDirectorResolver = playableDirectorResolver;
+        public TimelineUseCase() {
+            // FIXME: Use Zenject
+            this.TimelineRepository = new DefaultRepositoryFactory<TimelineRepository<TTimelineEntity>>().Create();
         }
 
         public PlayableDirector GetPlayableDirector<TEnum>(TEnum name) where TEnum : struct {
-            return this.PlayableDirectorResolver.GetPlayableDirector(name);
-        }
-
-        public TimelineUseCase<TTimelineModel> Create() {
-            return new TimelineUseCase<TTimelineModel>();
+            return this.TimelineRepository.GetPlayableDirector(name);
         }
 
     }
