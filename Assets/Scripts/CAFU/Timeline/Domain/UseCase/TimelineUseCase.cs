@@ -1,36 +1,30 @@
-﻿using CAFU.Core.Domain;
+﻿using CAFU.Core.Domain.UseCase;
 using CAFU.Timeline.Domain.Model;
 using UnityEngine.Playables;
 
 namespace CAFU.Timeline.Domain.UseCase {
 
-    public interface IPlayableDirectorResolver<in TEnum> where TEnum : struct {
+    public interface IPlayableDirectorResolver {
 
-        PlayableDirector GetPlayableDirector(TEnum timelineName);
+        PlayableDirector GetPlayableDirector<TEnum>(TEnum timelineName) where TEnum : struct;
 
     }
 
-    public class TimelineUseCase<TEnum, TTimelineInformation> : IUseCase, IUseCaseBuilder
-        where TEnum : struct
-        where TTimelineInformation : TimelineInformation<TEnum>, new() {
+    public class TimelineUseCase<TTimelineModel> : IUseCase, IUseCaseFactory<TimelineUseCase<TTimelineModel>>
+        where TTimelineModel : ITimelineModel, new() {
 
-        private TimelineModel<TEnum, TTimelineInformation> TimelineModel { get; set; }
+        private IPlayableDirectorResolver PlayableDirectorResolver { get; set; }
 
-        private IPlayableDirectorResolver<TEnum> PlayableDirectorResolver { get; set; }
-
-        public void Build() {
-            this.TimelineModel = new TimelineModel<TEnum, TTimelineInformation>();
-        }
-
-        public void RegisterPlayableDirectorResolver(IPlayableDirectorResolver<TEnum> playableDirectorResolver) {
+        public void RegisterPlayableDirectorResolver(IPlayableDirectorResolver playableDirectorResolver) {
             this.PlayableDirectorResolver = playableDirectorResolver;
         }
 
-        public PlayableDirector GetPlayableDirector(TEnum name) {
-            if (!this.TimelineModel.HasPlayableDirector(name)) {
-                this.TimelineModel.SetTimelineInformation(name, this.PlayableDirectorResolver.GetPlayableDirector(name));
-            }
-            return this.TimelineModel.GetPlayableDirector(name);
+        public PlayableDirector GetPlayableDirector<TEnum>(TEnum name) where TEnum : struct {
+            return this.PlayableDirectorResolver.GetPlayableDirector(name);
+        }
+
+        public TimelineUseCase<TTimelineModel> Create() {
+            return new TimelineUseCase<TTimelineModel>();
         }
 
     }
