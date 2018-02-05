@@ -1,28 +1,37 @@
 ﻿using CAFU.Core.Domain.Repository;
-using CAFU.Timeline.Data.DataStore;
 using CAFU.Timeline.Data.DataStore.Scene;
-using CAFU.Timeline.Data.Entity;
 using UnityEngine.Playables;
 
 namespace CAFU.Timeline.Domain.Repository {
 
     public interface ITimelineRepository : IRepository {
 
-        PlayableDirector GetPlayableDirector<TEnum>(TEnum name) where TEnum : struct;
+    }
+
+    public interface ITimelineRepository<in TEnum> : ITimelineRepository
+        where TEnum : struct {
+
+        PlayableDirector GetPlayableDirector(TEnum name);
 
     }
 
-    public class TimelineRepository<TTimelineEntity> : ITimelineRepository
-        where TTimelineEntity : class, ITimelineEntity, new() {
+    public class TimelineRepository<TEnum> : ITimelineRepository<TEnum>
+        where TEnum : struct {
 
-        private ITimelineDataStore TimelineDataStore { get; }
+        public class Factory : IRepositoryFactory<TimelineRepository<TEnum>> {
 
-        public TimelineRepository() {
-            // FIXME: Use Zenject
-            this.TimelineDataStore = new TimelineDataStore<TTimelineEntity>.Factory().Create();
+            public TimelineRepository<TEnum> Create() {
+                TimelineRepository<TEnum> timelineRepository = new TimelineRepository<TEnum> {
+                    TimelineDataStore = new TimelineDataStore<TEnum>.Factory().Create()
+                };
+                return timelineRepository;
+            }
+
         }
 
-        public PlayableDirector GetPlayableDirector<TEnum>(TEnum name) where TEnum : struct {
+        private TimelineDataStore<TEnum> TimelineDataStore { get; set; }
+
+        public PlayableDirector GetPlayableDirector(TEnum name) {
             return this.TimelineDataStore.GetPlayableDirector(name);
         }
 
