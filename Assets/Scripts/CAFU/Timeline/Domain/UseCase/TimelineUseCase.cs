@@ -7,12 +7,11 @@ namespace CAFU.Timeline.Domain.UseCase {
     public class TimelineUseCase<TEnum> : IUseCase
         where TEnum : struct {
 
-        public class Factory : IUseCaseFactory<TimelineUseCase<TEnum>> {
+        public class Factory : DefaultUseCaseFactory<Factory, TimelineUseCase<TEnum>> {
 
-            public TimelineUseCase<TEnum> Create() {
-                return new TimelineUseCase<TEnum>() {
-                    TimelineRepository = new TimelineRepository<TEnum>.Factory().Create(),
-                };
+            protected override void Initialize(TimelineUseCase<TEnum> instance) {
+                base.Initialize(instance);
+                instance.TimelineRepository = TimelineRepository<TEnum>.Factory.Instance.Create();
             }
 
         }

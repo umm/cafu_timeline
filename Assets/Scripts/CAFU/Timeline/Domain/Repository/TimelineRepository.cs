@@ -18,13 +18,11 @@ namespace CAFU.Timeline.Domain.Repository {
     public class TimelineRepository<TEnum> : ITimelineRepository<TEnum>
         where TEnum : struct {
 
-        public class Factory : IRepositoryFactory<TimelineRepository<TEnum>> {
+        public class Factory : DefaultRepositoryFactory<Factory, TimelineRepository<TEnum>> {
 
-            public TimelineRepository<TEnum> Create() {
-                TimelineRepository<TEnum> timelineRepository = new TimelineRepository<TEnum> {
-                    TimelineDataStore = new TimelineDataStore<TEnum>.Factory().Create()
-                };
-                return timelineRepository;
+            protected override void Initialize(TimelineRepository<TEnum> instance) {
+                base.Initialize(instance);
+                instance.TimelineDataStore = new TimelineDataStore<TEnum>.Factory().Create();
             }
 
         }

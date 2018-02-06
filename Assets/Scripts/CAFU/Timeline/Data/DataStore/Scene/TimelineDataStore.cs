@@ -13,12 +13,17 @@ namespace CAFU.Timeline.Data.DataStore.Scene {
         where TEnum : struct {
 
         [ObservableAwakeMonoBehaviour]
+        // ReSharper disable once UnusedMember.Global
         TimelineDataStore<TEnum> TimelineDataStore { get; }
 
     }
 
     public abstract class TimelineDataStore<TEnum> : ObservableLifecycleMonoBehaviour, ITimelineDataStore<TEnum>
         where TEnum : struct {
+
+        public class Factory : SceneDataStoreFactory<Factory, TimelineDataStore<TEnum>> {
+
+        }
 
         protected abstract IEnumerable<ITimelineEntity<TEnum>> DefinedTimelineEntityList { get; }
 
@@ -52,14 +57,6 @@ namespace CAFU.Timeline.Data.DataStore.Scene {
                      PlayableDirector = playableDirectorTransform.GetComponent<PlayableDirector>(),
                 }
             );
-        }
-
-        public class Factory : IDataStoreFactory<TimelineDataStore<TEnum>> {
-
-            public TimelineDataStore<TEnum> Create() {
-                return FindObjectOfType<TimelineDataStore<TEnum>>();
-            }
-
         }
 
     }
