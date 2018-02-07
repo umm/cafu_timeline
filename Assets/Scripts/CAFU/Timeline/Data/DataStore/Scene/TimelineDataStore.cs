@@ -6,41 +6,53 @@ using CAFU.Timeline.Data.Entity;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Playables;
+// ReSharper disable ArrangeAccessorOwnerBody
+// ReSharper disable UseNullPropagation
 
 namespace CAFU.Timeline.Data.DataStore.Scene {
 
-    public interface ITimelineDataStoreController<TEnum>
-        where TEnum : struct {
+    public interface ITimelineDataStoreController {
 
         [ObservableAwakeMonoBehaviour]
         // ReSharper disable once UnusedMember.Global
-        TimelineDataStore<TEnum> TimelineDataStore { get; }
+        ITimelineDataStore TimelineDataStore { get; }
 
     }
 
-    public abstract class TimelineDataStore<TEnum> : ObservableLifecycleMonoBehaviour, ITimelineDataStore<TEnum>
-        where TEnum : struct {
+    public abstract class TimelineDataStore<TTimelineEntity> : ObservableLifecycleMonoBehaviour, ITimelineDataStore
+        where TTimelineEntity : ITimelineEntity {
 
-        public class Factory : SceneDataStoreFactory<Factory, TimelineDataStore<TEnum>> {
+        public class Factory : SceneDataStoreFactory<Factory, TimelineDataStore<TTimelineEntity>> {
 
         }
 
-        protected abstract IEnumerable<ITimelineEntity<TEnum>> DefinedTimelineEntityList { get; }
+        [SerializeField]
+        private List<TTimelineEntity> definedTimelineEntityList;
 
-        private List<ITimelineEntity<TEnum>> TimelineEntityList { get; set; }
+        private IEnumerable<ITimelineEntity> DefinedTimelineEntityList {
+            get {
+                return this.definedTimelineEntityList.Cast<ITimelineEntity>();
+            }
+        }
 
-        public PlayableDirector GetPlayableDirector(TEnum timelineName) {
+        private List<ITimelineEntity> TimelineEntityList { get; set; }
+
+        public PlayableDirector GetPlayableDirector<TEnum>(TEnum timelineName) where TEnum : struct {
             // 定義済リストをコピーする
-            if (this.TimelineEntityList == default(List<ITimelineEntity<TEnum>>)) {
+            if (this.TimelineEntityList == default(List<ITimelineEntity>)) {
                 this.TimelineEntityList = this.DefinedTimelineEntityList.ToList();
             }
-            if (!this.TimelineEntityList.Any(x => x.Name.Equals(timelineName))) {
+            if (!this.TimelineEntityList.Any(x => ((ITimelineEntity<TEnum>)x).Name.Equals(timelineName))) {
                 this.AddTimelineEntityFromTransform(timelineName);
             }
-            return this.TimelineEntityList.Find(x => x.Name.Equals(timelineName)).PlayableDirector;
+            ITimelineEntity timelineEntity = this.TimelineEntityList.Find(x => ((ITimelineEntity<TEnum>)x).Name.Equals(timelineName));
+            if (timelineEntity == default(ITimelineEntity)) {
+                return null;
+            }
+            return ((ITimelineEntity<TEnum>)timelineEntity).PlayableDirector;
         }
 
-        private void AddTimelineEntityFromTransform(TEnum timelineName) {
+        private void AddTimelineEntityFromTransform<TEnum>(TEnum timelineName) where TEnum : struct {
             // enum のアンダースコアをスラッシュに置換して、Hierarchy を探す
             Transform playableDirectorTransform = this.transform.Find(timelineName.ToString().Replace("_", "/"));
             // 見付からなかった場合に、配下の全 Transform の名前を enum の完全一致で探す
