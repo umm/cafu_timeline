@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CAFU.Core.Presentation.View;
 using CAFU.Timeline.Domain.Model;
@@ -9,11 +10,12 @@ using UnityEngine.Playables;
 
 namespace CAFU.Timeline.Presentation.View {
 
-    public interface ITimelineView {
+    public interface ITimelineView : IView {
 
     }
 
-    public abstract class TimelineView<TEnum, TTimelineInformation> : MonoBehaviour, IView, ITimelineView, IPlayableDirectorResolver<TEnum>
+    [Obsolete("Please use TimelineView<TTimelineModel> instead of this class.")]
+    public abstract class TimelineView<TEnum, TTimelineInformation> : MonoBehaviour, ITimelineView, IPlayableDirectorResolver<TEnum>
         where TEnum : struct
         where TTimelineInformation : TimelineInformation<TEnum>, new() {
 

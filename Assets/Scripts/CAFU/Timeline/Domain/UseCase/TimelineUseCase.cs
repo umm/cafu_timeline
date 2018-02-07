@@ -1,36 +1,32 @@
-﻿using CAFU.Core.Domain;
-using CAFU.Timeline.Domain.Model;
+﻿using CAFU.Core.Domain.UseCase;
+using CAFU.Timeline.Data.Entity;
+using CAFU.Timeline.Domain.Repository;
 using UnityEngine.Playables;
 
 namespace CAFU.Timeline.Domain.UseCase {
 
-    public interface IPlayableDirectorResolver<in TEnum> where TEnum : struct {
+    public interface ITimelineUseCase : IUseCase {
 
-        PlayableDirector GetPlayableDirector(TEnum timelineName);
+        PlayableDirector GetPlayableDirector<TEnum>(TEnum name) where TEnum : struct;
 
     }
 
-    public class TimelineUseCase<TEnum, TTimelineInformation> : IUseCase, IUseCaseBuilder
-        where TEnum : struct
-        where TTimelineInformation : TimelineInformation<TEnum>, new() {
+    public class TimelineUseCase<TTimelineEntity> : ITimelineUseCase
+        where TTimelineEntity : ITimelineEntity {
 
-        private TimelineModel<TEnum, TTimelineInformation> TimelineModel { get; set; }
+        public class Factory : DefaultUseCaseFactory<Factory, TimelineUseCase<TTimelineEntity>> {
 
-        private IPlayableDirectorResolver<TEnum> PlayableDirectorResolver { get; set; }
-
-        public void Build() {
-            this.TimelineModel = new TimelineModel<TEnum, TTimelineInformation>();
-        }
-
-        public void RegisterPlayableDirectorResolver(IPlayableDirectorResolver<TEnum> playableDirectorResolver) {
-            this.PlayableDirectorResolver = playableDirectorResolver;
-        }
-
-        public PlayableDirector GetPlayableDirector(TEnum name) {
-            if (!this.TimelineModel.HasPlayableDirector(name)) {
-                this.TimelineModel.SetTimelineInformation(name, this.PlayableDirectorResolver.GetPlayableDirector(name));
+            protected override void Initialize(TimelineUseCase<TTimelineEntity> instance) {
+                base.Initialize(instance);
+                instance.TimelineRepository = TimelineRepository<TTimelineEntity>.Factory.Instance.Create();
             }
-            return this.TimelineModel.GetPlayableDirector(name);
+
+        }
+
+        private ITimelineRepository TimelineRepository { get; set; }
+
+        public PlayableDirector GetPlayableDirector<TEnum>(TEnum name) where TEnum : struct {
+            return this.TimelineRepository.GetPlayableDirector(name);
         }
 
     }

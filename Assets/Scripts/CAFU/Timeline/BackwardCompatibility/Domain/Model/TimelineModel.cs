@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CAFU.Core.Domain;
 using UnityEngine;
 using UnityEngine.Playables;
+#pragma warning disable 618
 
 namespace CAFU.Timeline.Domain.Model {
 
+    [Obsolete("Please use CAFU.Timeline.Domain.Model.TimelineModel<TEnum> instead of this class.")]
     public class TimelineModel<TEnum, TTimelineInformation> : IModel
         where TEnum : struct
         where TTimelineInformation : TimelineInformation<TEnum>, new() {
@@ -35,6 +38,7 @@ namespace CAFU.Timeline.Domain.Model {
 
     }
 
+    [Obsolete("Please use CAFU.Timeline.Domain.Model.TimelineModel<TEnum> instead of this class.")]
     public abstract class TimelineInformation<TEnum> where TEnum : struct {
 
         [SerializeField]
