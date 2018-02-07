@@ -11,14 +11,6 @@ using UnityEngine.Playables;
 
 namespace CAFU.Timeline.Data.DataStore.Scene {
 
-    public interface ITimelineDataStoreController {
-
-        [ObservableAwakeMonoBehaviour]
-        // ReSharper disable once UnusedMember.Global
-        ITimelineDataStore TimelineDataStore { get; }
-
-    }
-
     public abstract class TimelineDataStore<TTimelineEntity> : ObservableLifecycleMonoBehaviour, ITimelineDataStore
         where TTimelineEntity : ITimelineEntity {
 
