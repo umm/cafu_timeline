@@ -4,9 +4,9 @@ using UnityEngine.Playables;
 
 namespace CAFU.Timeline.Data.DataStore {
 
-    public interface ITimelineDataStore : IDataStore {
+    public interface ITimelineDataStore<in TEnum, TTimelineEntity> : IDataStore where TEnum : struct where TTimelineEntity : ITimelineEntity {
 
-        PlayableDirector GetPlayableDirector<TEnum>(TEnum timelineName) where TEnum : struct;
+        PlayableDirector GetPlayableDirector(TEnum timelineName);
 
     }
 

@@ -1,31 +1,35 @@
 ﻿using CAFU.Core.Domain.Repository;
+using CAFU.Timeline.Data.DataStore;
 using CAFU.Timeline.Data.DataStore.Scene;
 using CAFU.Timeline.Data.Entity;
 using UnityEngine.Playables;
 
 namespace CAFU.Timeline.Domain.Repository {
 
-    public interface ITimelineRepository : IRepository {
+    public interface ITimelineRepository<in TEnum, TTimelineEntity> : IRepository where TEnum : struct where TTimelineEntity : ITimelineEntity<TEnum> {
 
-        PlayableDirector GetPlayableDirector<TEnum>(TEnum name) where TEnum : struct;
+        ITimelineDataStore<TEnum, TTimelineEntity> TimelineDataStore { get; }
+
+        PlayableDirector GetPlayableDirector(TEnum name);
 
     }
 
-    public class TimelineRepository<TTimelineEntity> : ITimelineRepository
-        where TTimelineEntity : ITimelineEntity {
+    public class TimelineRepository<TEnum, TTimelineEntity> : ITimelineRepository<TEnum, TTimelineEntity>
+        where TEnum : struct
+        where TTimelineEntity : ITimelineEntity<TEnum> {
 
-        public class Factory : DefaultRepositoryFactory<Factory, TimelineRepository<TTimelineEntity>> {
+        public class Factory : DefaultRepositoryFactory<TimelineRepository<TEnum, TTimelineEntity>> {
 
-            protected override void Initialize(TimelineRepository<TTimelineEntity> instance) {
+            protected override void Initialize(TimelineRepository<TEnum, TTimelineEntity> instance) {
                 base.Initialize(instance);
-                instance.TimelineDataStore = new TimelineDataStore<TTimelineEntity>.Factory().Create();
+                instance.TimelineDataStore = new TimelineDataStore<TEnum, TTimelineEntity>.Factory().Create();
             }
 
         }
 
-        private TimelineDataStore<TTimelineEntity> TimelineDataStore { get; set; }
+        public ITimelineDataStore<TEnum, TTimelineEntity> TimelineDataStore { get; private set; }
 
-        public PlayableDirector GetPlayableDirector<TEnum>(TEnum name) where TEnum : struct {
+        public PlayableDirector GetPlayableDirector(TEnum name) {
             return this.TimelineDataStore.GetPlayableDirector(name);
         }
 
