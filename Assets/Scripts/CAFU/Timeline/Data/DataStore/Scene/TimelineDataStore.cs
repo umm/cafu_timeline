@@ -11,10 +11,11 @@ using UnityEngine.Playables;
 
 namespace CAFU.Timeline.Data.DataStore.Scene {
 
-    public abstract class TimelineDataStore<TTimelineEntity> : ObservableLifecycleMonoBehaviour, ITimelineDataStore
+    public abstract class TimelineDataStore<TEnum, TTimelineEntity> : ObservableLifecycleMonoBehaviour, ITimelineDataStore<TEnum, TTimelineEntity>
+        where TEnum : struct
         where TTimelineEntity : ITimelineEntity {
 
-        public class Factory : SceneDataStoreFactory<Factory, TimelineDataStore<TTimelineEntity>> {
+        public class Factory : SceneDataStoreFactory<TimelineDataStore<TEnum, TTimelineEntity>> {
 
         }
 
@@ -29,7 +30,7 @@ namespace CAFU.Timeline.Data.DataStore.Scene {
 
         private List<ITimelineEntity> TimelineEntityList { get; set; }
 
-        public PlayableDirector GetPlayableDirector<TEnum>(TEnum timelineName) where TEnum : struct {
+        public PlayableDirector GetPlayableDirector(TEnum timelineName) {
             // 定義済リストをコピーする
             if (this.TimelineEntityList == default(List<ITimelineEntity>)) {
                 this.TimelineEntityList = this.DefinedTimelineEntityList.ToList();
@@ -44,7 +45,7 @@ namespace CAFU.Timeline.Data.DataStore.Scene {
             return ((ITimelineEntity<TEnum>)timelineEntity).PlayableDirector;
         }
 
-        private void AddTimelineEntityFromTransform<TEnum>(TEnum timelineName) where TEnum : struct {
+        private void AddTimelineEntityFromTransform(TEnum timelineName) {
             // enum のアンダースコアをスラッシュに置換して、Hierarchy を探す
             Transform playableDirectorTransform = this.transform.Find(timelineName.ToString().Replace("_", "/"));
             // 見付からなかった場合に、配下の全 Transform の名前を enum の完全一致で探す
