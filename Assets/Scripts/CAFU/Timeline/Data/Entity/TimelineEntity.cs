@@ -8,11 +8,11 @@ namespace CAFU.Timeline.Data.Entity {
 
     }
 
-    public interface ITimelineEntity<out TEnum> : ITimelineEntity where TEnum : struct {
+    public interface ITimelineEntity<TEnum> : ITimelineEntity where TEnum : struct {
 
-        TEnum Name { get; }
+        TEnum Name { get; set; }
 
-        PlayableDirector PlayableDirector { get; }
+        PlayableDirector PlayableDirector { get; set; }
 
     }
 

@@ -4,16 +4,22 @@ using CAFU.Timeline.Domain.UseCase;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityModule.Playables;
+using Zenject;
+// ReSharper disable UnusedMember.Global
 
 namespace CAFU.Timeline.Presentation.Presenter {
 
-    public interface ITimelinePresenter<in TEnum, TTimelineEntity> : IPresenter where TEnum : struct where TTimelineEntity : ITimelineEntity<TEnum> {
+    public interface ITimelinePresenter<in TEnum, out TTimelineEntity> : IPresenter where TEnum : struct where TTimelineEntity : ITimelineEntity<TEnum> {
 
         ITimelineUseCase<TEnum, TTimelineEntity> TimelineUseCase { get; }
 
     }
 
     public static class TimelinePresenterExtension {
+
+        public static TTimelineEntity GetTimelineEntity<TEnum, TTimelineEntity>(this ITimelinePresenter<TEnum, TTimelineEntity> presenter, TEnum timelineName) where TEnum : struct where TTimelineEntity : ITimelineEntity<TEnum> {
+            return presenter.TimelineUseCase.GetTimelineEntity(timelineName);
+        }
 
         public static PlayableDirector GetPlayableDirector<TEnum, TTimelineEntity>(this ITimelinePresenter<TEnum, TTimelineEntity> presenter, TEnum timelineName) where TEnum : struct where TTimelineEntity : ITimelineEntity<TEnum> {
             return presenter.TimelineUseCase.GetPlayableDirector(timelineName);
