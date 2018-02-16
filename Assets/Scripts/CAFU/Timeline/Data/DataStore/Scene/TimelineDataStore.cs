@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 // ReSharper disable ArrangeAccessorOwnerBody
 // ReSharper disable UseNullPropagation
+// ReSharper disable UseStringInterpolation
 
 namespace CAFU.Timeline.Data.DataStore.Scene {
 
@@ -54,7 +55,7 @@ namespace CAFU.Timeline.Data.DataStore.Scene {
             }
             // それでも見付からなかった場合は Exception を throw する
             if (playableDirectorTransform == default(Transform)) {
-                throw new ArgumentException($"TimelineName '{timelineName}' does not found.");
+                throw new ArgumentException(string.Format("TimelineName '{0}' does not found.", timelineName));
             }
             this.TimelineEntityList.Add(
                 new TimelineEntity<TEnum>() {
