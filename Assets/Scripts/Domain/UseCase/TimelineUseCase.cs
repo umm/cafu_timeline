@@ -1,4 +1,5 @@
-﻿using CAFU.Core.Domain.UseCase;
+﻿using System;
+using CAFU.Core.Domain.UseCase;
 using CAFU.Timeline.Data.Entity;
 using CAFU.Timeline.Domain.Repository;
 using JetBrains.Annotations;
@@ -6,13 +7,20 @@ using UnityEngine.Playables;
 
 namespace CAFU.Timeline.Domain.UseCase
 {
-    public interface ITimelineUseCase<in TEnum, TTimelineEntity> : IUseCase where TEnum : struct where TTimelineEntity : ITimelineEntity<TEnum>
+    public interface ITimelineUseCase<in TEnum> : IUseCase where TEnum : struct
     {
         PlayableDirector GetPlayableDirector(TEnum name);
     }
 
+    [Obsolete("Use `ITimelineUseCase<TEnum> instead of this interface.`")]
+    // ReSharper disable once UnusedTypeParameter
+    // ReSharper disable once UnusedMember.Global
+    public interface ITimelineUseCase<in TEnum, TTimelineEntity> : ITimelineUseCase<TEnum> where TEnum : struct where TTimelineEntity : ITimelineEntity<TEnum>
+    {
+    }
+
     [PublicAPI]
-    public class TimelineUseCase<TEnum, TTimelineEntity> : ITimelineUseCase<TEnum, TTimelineEntity>
+    public class TimelineUseCase<TEnum, TTimelineEntity> : ITimelineUseCase<TEnum>
         where TEnum : struct
         where TTimelineEntity : ITimelineEntity<TEnum>
     {
@@ -25,7 +33,7 @@ namespace CAFU.Timeline.Domain.UseCase
             }
         }
 
-        public ITimelineRepository<TEnum, TTimelineEntity> TimelineRepository { get; private set; }
+        private ITimelineRepository<TEnum> TimelineRepository { get; set; }
 
         public PlayableDirector GetPlayableDirector(TEnum name)
         {

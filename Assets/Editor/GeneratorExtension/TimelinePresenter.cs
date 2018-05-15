@@ -30,11 +30,12 @@ namespace CAFU.Timeline.GeneratorExtension
                 parameter.UsingList.Add("CAFU.Timeline.Domain.UseCase");
                 parameter.UsingList.Add($"TimelineName = {GeneratorWindow.ProjectContext.NamespacePrefix}.Application.Enumerates.TimelineName.Title");
                 parameter.UsingList.Add($"TimelineEntity = {GeneratorWindow.ProjectContext.NamespacePrefix}.Data.Entity.TimelineEntity.Title");
-                parameter.ImplementsInterfaceList.Add("ITimelinePresenter<TimelineName, TimelineEntity>");
+                parameter.ImplementsInterfaceList.Add("ITimelinePresenter<TimelineName>");
                 parameter.PropertyList.Add(
                     new Parameter.Property()
                     {
                         Accessibility = Accessibility.Public,
+                        Interface = "ITimelineUseCase<TimelineName>",
                         Type = "TimelineUseCase<TimelineName, TimelineEntity>",
                         Name = "TimelineUseCase",
                     }
