@@ -14,35 +14,23 @@ namespace CAFU.Timeline.Data.DataStore
         PlayableDirector GetPlayableDirector(TEnum timelineName);
     }
 
-    public abstract class TimelineDataStore<TEnum, TTimelineEntity> : ObservableLifecycleMonoBehaviour, ITimelineDataStore<TEnum>
+    public abstract class TimelineDataStore<TEnum> : ObservableLifecycleMonoBehaviour, ITimelineDataStore<TEnum>
         where TEnum : struct
-        where TTimelineEntity : ITimelineEntity
     {
-        public class Factory : SceneDataStoreFactory<TimelineDataStore<TEnum, TTimelineEntity>>
+        public class Factory : SceneDataStoreFactory<TimelineDataStore<TEnum>>
         {
         }
 
-        [SerializeField] private List<TTimelineEntity> definedTimelineEntityList;
-
-        private IEnumerable<ITimelineEntity> DefinedTimelineEntityList => definedTimelineEntityList.Cast<ITimelineEntity>();
-
-        private List<ITimelineEntity> TimelineEntityList { get; set; }
+        private List<ITimelineEntity<TEnum>> TimelineEntityList { get; } = new List<ITimelineEntity<TEnum>>();
 
         public PlayableDirector GetPlayableDirector(TEnum timelineName)
         {
-            // 定義済リストをコピーする
-            if (TimelineEntityList == default(List<ITimelineEntity>))
-            {
-                TimelineEntityList = DefinedTimelineEntityList.ToList();
-            }
-
-            if (!TimelineEntityList.Any(x => ((ITimelineEntity<TEnum>) x).Name.Equals(timelineName)))
+            if (!TimelineEntityList.Any(x => x.Name.Equals(timelineName)))
             {
                 AddTimelineEntityFromTransform(timelineName);
             }
 
-            var timelineEntity = TimelineEntityList.Find(x => ((ITimelineEntity<TEnum>) x).Name.Equals(timelineName));
-            return ((ITimelineEntity<TEnum>) timelineEntity)?.PlayableDirector;
+            return TimelineEntityList.Find(x => x.Name.Equals(timelineName)).PlayableDirector;
         }
 
         private void AddTimelineEntityFromTransform(TEnum timelineName)

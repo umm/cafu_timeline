@@ -1,6 +1,5 @@
 ﻿using CAFU.Core.Domain.Repository;
 using CAFU.Timeline.Data.DataStore;
-using CAFU.Timeline.Data.Entity;
 using JetBrains.Annotations;
 using UnityEngine.Playables;
 
@@ -12,16 +11,15 @@ namespace CAFU.Timeline.Domain.Repository
     }
 
     [PublicAPI]
-    public class TimelineRepository<TEnum, TTimelineEntity> : ITimelineRepository<TEnum>
+    public class TimelineRepository<TEnum> : ITimelineRepository<TEnum>
         where TEnum : struct
-        where TTimelineEntity : ITimelineEntity<TEnum>
     {
-        public class Factory : DefaultRepositoryFactory<TimelineRepository<TEnum, TTimelineEntity>>
+        public class Factory : DefaultRepositoryFactory<TimelineRepository<TEnum>>
         {
-            protected override void Initialize(TimelineRepository<TEnum, TTimelineEntity> instance)
+            protected override void Initialize(TimelineRepository<TEnum> instance)
             {
                 base.Initialize(instance);
-                instance.TimelineDataStore = new TimelineDataStore<TEnum, TTimelineEntity>.Factory().Create();
+                instance.TimelineDataStore = new TimelineDataStore<TEnum>.Factory().Create();
             }
         }
 

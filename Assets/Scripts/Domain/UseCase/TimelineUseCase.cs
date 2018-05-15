@@ -1,5 +1,4 @@
 ﻿using CAFU.Core.Domain.UseCase;
-using CAFU.Timeline.Data.Entity;
 using CAFU.Timeline.Domain.Repository;
 using JetBrains.Annotations;
 using UnityEngine.Playables;
@@ -12,16 +11,15 @@ namespace CAFU.Timeline.Domain.UseCase
     }
 
     [PublicAPI]
-    public class TimelineUseCase<TEnum, TTimelineEntity> : ITimelineUseCase<TEnum>
+    public class TimelineUseCase<TEnum> : ITimelineUseCase<TEnum>
         where TEnum : struct
-        where TTimelineEntity : ITimelineEntity<TEnum>
     {
-        public class Factory : DefaultUseCaseFactory<TimelineUseCase<TEnum, TTimelineEntity>>
+        public class Factory : DefaultUseCaseFactory<TimelineUseCase<TEnum>>
         {
-            protected override void Initialize(TimelineUseCase<TEnum, TTimelineEntity> instance)
+            protected override void Initialize(TimelineUseCase<TEnum> instance)
             {
                 base.Initialize(instance);
-                instance.TimelineRepository = new TimelineRepository<TEnum, TTimelineEntity>.Factory().Create();
+                instance.TimelineRepository = new TimelineRepository<TEnum>.Factory().Create();
             }
         }
 
