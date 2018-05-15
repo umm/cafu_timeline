@@ -1,24 +1,15 @@
-﻿using System;
-using CAFU.Core.Presentation.Presenter;
-using CAFU.Timeline.Data.Entity;
+﻿using CAFU.Core.Presentation.Presenter;
 using CAFU.Timeline.Domain.UseCase;
 using JetBrains.Annotations;
+using UnityEngine;
 using UnityEngine.Playables;
 using UnityModule.Playables;
-using Object = UnityEngine.Object;
 
 namespace CAFU.Timeline.Presentation.Presenter
 {
     public interface ITimelinePresenter<in TEnum> : IPresenter where TEnum : struct
     {
         ITimelineUseCase<TEnum> TimelineUseCase { get; }
-    }
-
-    [Obsolete("Use `ITimelinePresenter<TEnum> instead of this interface.`")]
-    // ReSharper disable once UnusedTypeParameter
-    // ReSharper disable once UnusedMember.Global
-    public interface ITimelinePresenter<in TEnum, TTimelineEntity> : ITimelinePresenter<TEnum> where TEnum : struct where TTimelineEntity : ITimelineEntity<TEnum>
-    {
     }
 
     [PublicAPI]

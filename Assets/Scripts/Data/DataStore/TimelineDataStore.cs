@@ -14,13 +14,6 @@ namespace CAFU.Timeline.Data.DataStore
         PlayableDirector GetPlayableDirector(TEnum timelineName);
     }
 
-    [Obsolete("Use `ITimelineDataStore<TEnum> instead of this interface.`")]
-    // ReSharper disable once UnusedTypeParameter
-    // ReSharper disable once UnusedMember.Global
-    public interface ITimelineDataStore<in TEnum, TTimelineEntity> : ITimelineDataStore<TEnum> where TEnum : struct where TTimelineEntity : ITimelineEntity
-    {
-    }
-
     public abstract class TimelineDataStore<TEnum, TTimelineEntity> : ObservableLifecycleMonoBehaviour, ITimelineDataStore<TEnum>
         where TEnum : struct
         where TTimelineEntity : ITimelineEntity

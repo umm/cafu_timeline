@@ -1,5 +1,4 @@
-﻿using System;
-using CAFU.Core.Domain.Repository;
+﻿using CAFU.Core.Domain.Repository;
 using CAFU.Timeline.Data.DataStore;
 using CAFU.Timeline.Data.Entity;
 using JetBrains.Annotations;
@@ -10,13 +9,6 @@ namespace CAFU.Timeline.Domain.Repository
     public interface ITimelineRepository<in TEnum> : IRepository where TEnum : struct
     {
         PlayableDirector GetPlayableDirector(TEnum name);
-    }
-
-    [Obsolete("Use `ITimelineRepository<TEnum> instead of this interface.`")]
-    // ReSharper disable once UnusedTypeParameter
-    // ReSharper disable once UnusedMember.Global
-    public interface ITimelineRepository<in TEnum, TTimelineEntity> : ITimelineRepository<TEnum> where TEnum : struct where TTimelineEntity : ITimelineEntity<TEnum>
-    {
     }
 
     [PublicAPI]
