@@ -1,6 +1,5 @@
 ﻿using CAFU.Core.Domain.Repository;
 using CAFU.Timeline.Data.DataStore;
-using CAFU.Timeline.Data.DataStore.Scene;
 using CAFU.Timeline.Data.Entity;
 using UnityEngine.Playables;
 
