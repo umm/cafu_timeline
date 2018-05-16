@@ -28,8 +28,8 @@ namespace CAFU.Timeline.GeneratorExtension
             {
                 parameter.UsingList.Add("CAFU.Timeline.Presentation.Presenter");
                 parameter.UsingList.Add("CAFU.Timeline.Domain.UseCase");
-                parameter.UsingList.Add($"TimelineName = {GeneratorWindow.ProjectContext.NamespacePrefix}.Application.Enumerates.TimelineName.Title");
-                parameter.UsingList.Add($"TimelineEntity = {GeneratorWindow.ProjectContext.NamespacePrefix}.Data.Entity.TimelineEntity.Title");
+                parameter.UsingList.Add($"TimelineName = {this.CreateNamespacePrefix()}Application.Enumerate.TimelineName.{parameter.SceneName}");
+                parameter.UsingList.Add($"TimelineEntity = {this.CreateNamespacePrefix()}Data.Entity.TimelineEntity.{parameter.SceneName}");
                 parameter.ImplementsInterfaceList.Add("ITimelinePresenter<TimelineName, TimelineEntity>");
                 parameter.PropertyList.Add(
                     new Parameter.Property()

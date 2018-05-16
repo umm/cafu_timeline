@@ -4,14 +4,13 @@ using CAFU.Generator;
 using CAFU.Generator.Enumerates;
 using JetBrains.Annotations;
 using UnityEditor;
-using UnityEngine;
 
 namespace CAFU.Timeline.Generator
 {
     [UsedImplicitly]
     public class TimelineEntity : ClassStructureBase
     {
-        private const string StructureName = "Data/Entities/TimelineEntity";
+        private const string StructureName = "Data/Entity/TimelineEntity";
 
         public override string Name { get; } = StructureName;
 
@@ -22,6 +21,15 @@ namespace CAFU.Timeline.Generator
         protected override string ModuleName { get; } = "umm@cafu_timeline";
 
         private int CurrentSceneNameIndex { get; set; }
+
+        public TimelineEntity()
+        {
+        }
+
+        public TimelineEntity(int currentSceneNameIndex)
+        {
+            CurrentSceneNameIndex = currentSceneNameIndex;
+        }
 
         public override void OnGUI()
         {
@@ -43,7 +51,7 @@ namespace CAFU.Timeline.Generator
 
             parameter.UsingList.Add("System");
             parameter.UsingList.Add("CAFU.Timeline.Data.Entity");
-            parameter.UsingList.Add($"TimelineName = {GeneratorWindow.ProjectContext.NamespacePrefix.Trim('.')}.Application.Enumerates.TimelineName.Title");
+            parameter.UsingList.Add($"TimelineName = {this.CreateNamespacePrefix()}Application.Enumerate.TimelineName.{parameter.SceneName}");
             parameter.BaseClassName = "TimelineEntity<TimelineName>";
 
             var generator = new ScriptGenerator(parameter, CreateTemplatePath(TemplateType.Class, StructureName));
@@ -53,12 +61,12 @@ namespace CAFU.Timeline.Generator
 
         protected override string CreateNamespace(Parameter parameter)
         {
-            return $"{GeneratorWindow.ProjectContext.NamespacePrefix.Trim('.')}.{ParentLayerType.ToString()}.{LayerType.ToString()}.TimelineEntity";
+            return $"{this.CreateNamespacePrefix()}{ParentLayerType.ToString()}.{LayerType.ToString()}.TimelineEntity";
         }
 
         protected override string CreateOutputPath(Parameter parameter)
         {
-            return Path.Combine(Application.dataPath, OutputDirectory, parameter.ParentLayerType.ToString(), parameter.LayerType.ToString(), "TimelineEntity", $"{parameter.ClassName}{ScriptExtension}");
+            return Path.Combine(UnityEngine.Application.dataPath, OutputDirectory, parameter.ParentLayerType.ToString(), parameter.LayerType.ToString(), "TimelineEntity", $"{parameter.ClassName}{ScriptExtension}");
         }
     }
 }
