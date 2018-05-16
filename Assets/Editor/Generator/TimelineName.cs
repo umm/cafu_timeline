@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
 
-namespace CAFU.Music.Generator
+namespace CAFU.Timeline.Generator
 {
     [UsedImplicitly]
     public class TimelineName : ClassStructureBase
