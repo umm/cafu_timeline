@@ -36,6 +36,7 @@ namespace CAFU.Timeline.GeneratorExtension
                     {
                         Accessibility = Accessibility.Public,
                         Type = "TimelineUseCase<TimelineName, TimelineEntity>",
+                        Interface = "ITimelineUseCase<TimelineName, TimelineEntity>",
                         Name = "TimelineUseCase",
                     }
                 );
