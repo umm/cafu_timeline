@@ -8,6 +8,7 @@
   },
   "scripts": {
     "umm:init": "umm-init",
+    "umm:generate_assembly_definition": "umm-generate_assembly_definition",
     "umm:module:install": "umm-module-install",
     "umm:module:uninstall": "umm-module-uninstall",
     "postinstall": "npm run --silent umm:module:install",
@@ -28,6 +29,7 @@
     "@umm/cafu_generator": "umm-projects/cafu_generator#^1.0.0",
     "@umm/playable_extension": "umm-projects/playable_extension#^1.0.0",
     "@umm/scripts": "umm-projects/scripts#^1.0.0",
+    "@umm/unirx_observablelifecyclemonobehaviour": "umm-projects/unirx_observablelifecyclemonobehaviour#^1.0.0",
     "@umm/unirx_observableplayables": "umm-projects/unirx_observableplayables#^1.0.0"
   },
   "devDependencies": {}
