@@ -1,0 +1,14 @@
+{
+    "name": "umm@cafu_timeline",
+    "references": [
+        "umm@cafu_core",
+        "umm@cafu_generator",
+        "umm@playable_extension",
+        "umm@unirx_observablelifecyclemonobehaviour",
+        "umm@unirx_observableplayables"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
