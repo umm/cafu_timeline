@@ -1,0 +1,13 @@
+{
+    "name": "umm@cafu_timeline-Editor",
+    "references": [
+        "umm@cafu_timeline",
+        "umm@cafu_generator-Editor"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
