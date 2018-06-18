@@ -1,7 +1,0 @@
-##Usings##namespace ##Namespace##
-{
-    [Serializable]
-    public class ##ClassName## : ##BaseClassName####ImplementsInterfaces##
-    {
-    }
-}
