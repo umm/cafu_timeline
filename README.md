@@ -6,12 +6,12 @@
 
 * Unity 2017.3
   * .NET 4.6 (Experimental)
-* [CAFU](https://github.com/umm-projects/cafu_core)
+* [CAFU](https://github.com/umm/cafu_core)
 
 # Install
 
 ```shell
-$ npm install github:umm-projects/cafu_timeline
+$ npm install github:umm/cafu_timeline
 ```
 
 # Usage

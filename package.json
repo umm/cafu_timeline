@@ -2,9 +2,9 @@
   "name": "@umm/cafu_timeline",
   "version": "2.4.0",
   "description": "Timeline UseCase for CAFU",
-  "homepage": "https://github.com/umm-projects/cafu_timeline",
+  "homepage": "https://github.com/umm/cafu_timeline",
   "bugs": {
-    "url": "https://github.com/umm-projects/cafu_timeline/issues"
+    "url": "https://github.com/umm/cafu_timeline/issues"
   },
   "scripts": {
     "umm:init": "umm-init",
@@ -18,18 +18,18 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:umm-projects/cafu_timeline"
+    "url": "git@github.com:umm/cafu_timeline"
   },
   "files": [
     "Assets",
     "scripts"
   ],
   "dependencies": {
-    "@umm/cafu_core": "umm-projects/cafu_core#^2.0.0",
-    "@umm/playable_extension": "umm-projects/playable_extension#^1.0.0",
-    "@umm/scripts": "umm-projects/scripts#^1.0.0",
-    "@umm/unirx_observablelifecyclemonobehaviour": "umm-projects/unirx_observablelifecyclemonobehaviour#^1.0.0",
-    "@umm/unirx_observableplayables": "umm-projects/unirx_observableplayables#^1.0.0"
+    "@umm/cafu_core": "umm/cafu_core#^2.0.0",
+    "@umm/playable_extension": "umm/playable_extension#^1.0.0",
+    "@umm/scripts": "umm/scripts#^1.0.0",
+    "@umm/unirx_observablelifecyclemonobehaviour": "umm/unirx_observablelifecyclemonobehaviour#^1.0.0",
+    "@umm/unirx_observableplayables": "umm/unirx_observableplayables#^1.0.0"
   },
   "devDependencies": {}
 }
